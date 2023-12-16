@@ -20,6 +20,60 @@ struct user { //kisisel bilgi structi
 	struct VaccineInformation vac;//ası bilgileri
 }user1;
 
+void IDtest(user& user1) { //kayit icin kontrol
+
+	char strID[5];//gecici ID
+	int count = 0;
+
+	fstream file("database.txt", ios::app | ios::in);//dosyayi okumak ve eklemek icin acar 
+
+	if (file.is_open())//dosyanin acilip acilmadigini kontrol eder.
+	{
+		strcpy(strID, user1.ID);//girilen IDyi strIDye kopyalar
+
+		while (1) {//sonsuz donguye girer
+			count = 0;
+
+			for (int i = 0; i < 2; i++)//ilk iki karakterin harf olup olmadigini kontrol eder
+			{
+				if (isalpha(strID[i]))
+				{
+					strID[i] = toupper(strID[i]);//kucuk harf ile giris yapildiysa onu buyuk harfe cevirir
+					count++;
+				}
+
+			}
+			for (int i = 2; i < 4; i++)//son iki karakterin rakam olup olmadigini kontrol eder
+			{
+				if (isdigit(strID[i]))
+				{
+					//strID[i] = toupper(strID[i]);
+					count++;
+				}
+
+			}
+			if (count != 4) {// strID yanlissa tekrar girilmesini ister
+
+				cout << "Your ID is not true. ID must be HHRR. HH = character of alphabet, RR = digit" << endl;
+				cout << "Please enter your ID again:";
+				cin.getline(strID, 5);
+
+			}
+			else//ID dogruysa donguyu sonlandırır.
+				break;
+		}
+		strcpy(user1.ID, strID);//dogru girilen strIDyi orjinal IDye kopyalar
+		file << user1.ID << ' '; // ID'yi dosyaya ekler
+	}
+	else
+	{
+		cout << "File could not be opened." << endl;//dosya acilmadiysa uyarı mesajı olusturdum
+	}
+
+	file.close();
+	system("cls");
+}
+
 void Register() { //kullanici kayit fonksiyonu
 
 	system("cls");
@@ -33,7 +87,7 @@ void Register() { //kullanici kayit fonksiyonu
 		cin.ignore();
 		cout << "\t\t\t\tEnter your ID(4-digit): ";
 		cin.getline(newUser.ID, 5);
-		//IDtest(newUser); //ID2yi kontrol eder
+		IDtest(newUser); //ID2yi kontrol eder
 		cout << "\t\t\t\tEnter your ID(4-digit): " << newUser.ID << endl;
 
 
