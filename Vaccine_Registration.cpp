@@ -2,6 +2,7 @@
 #include<ctype.h>
 #include<string>
 #include<fstream>//dosya islemleri icin
+#include<conio.h>//_getch icin
 
 using namespace std;
 
@@ -125,6 +126,60 @@ void Register() { //kullanici kayit fonksiyonu
 	file.close();
 }
 
+
+void viewRegistation() { //istenilen kullanici bilgisini goruntuleyen fonksiyon
+
+	fstream file("database.txt", ios::in);
+
+	if (file.is_open())
+	{
+		char test[5];
+		int flag = 0;
+		system("cls");
+
+
+		cout << "\t\t\tPlease, enter ID of user which you want to display:";
+		cin >> test;
+		//ID(test);
+
+
+		//file.seekg(-1L, ios::cur);//alt satırın wn daşından başlaması icin bu satırı yazdım
+		file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+
+		while (!file.eof())//dosyanın acik olup olmadigini kontrol eder
+		{
+			if (strcmp(test, user1.ID) == 0)
+			{
+
+				cout << "\t\t\t\t\t___ USER'S PERSONAL INFORMATION ___ " << endl;
+				cout << "\t\t\t\tID: " << user1.ID << endl;
+				cout << "\t\t\t\tName: " << user1.name << endl;
+				cout << "\t\t\t\tSurname: " << user1.surname << endl;
+				cout << "\t\t\t\tAge: " << user1.age << endl;
+				cout << "\t\t\t\tCity: " << user1.city << endl;
+				cout << "\t\t\t\t\t___ USER'S VACCINE INFORMATION ___ " << endl;
+				cout << "\t\t\t\tLast vaccination date: " << user1.vac.lastDate << endl;
+				cout << "\t\t\t\tVaccine name: " << user1.vac.vaccineName << endl;
+				cout << "\t\t\t\tVaccine dose no: " << user1.vac.doseNo << endl;
+				flag++; // kullanıcının dosyada oldugunu kontrolu icin
+				break;
+			}
+
+			file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+		}
+		if (flag == 0)
+		{
+			cout << endl << "\t\t\t\tThis ID is not registered." << endl; // kullanıcı yoksa bilgilendirir
+		}
+		_getch();
+		file.close();
+	}
+	else
+	{
+		cout << "File could not be opened." << endl;
+	}
+}
+
 void main()
 {
 	int option = 0;
@@ -148,6 +203,7 @@ void main()
 			Register();
 			break;
 		case 2:
+			viewRegistation();
 			break;
 		case 3:
 			break;
