@@ -220,6 +220,89 @@ void viewRegistation() { //istenilen kullanici bilgisini goruntuleyen fonksiyon
 	}
 }
 
+void updateData()
+{
+	int flag = 0;
+	fstream file, new_file;
+	file.open("database.txt", ios::in | ios::out);
+
+	if (file.is_open())
+	{
+		char test[5];
+
+		system("cls");
+
+		cout << "\t\t\tPlease, enter ID of user which you want to display:";
+		cin >> test;
+		ID(test);
+
+		new_file.open("Record.txt", ios::app | ios::out); //dosyayı eklemek icin acar
+
+		file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+		while (!file.eof())
+		{
+			if (strcmp(test, user1.ID) == 0) // yeni bilgileri kullanicidan alir
+			{
+				cout << endl << "\t\t\tRegistered ID: " << user1.ID << endl;
+				cout << "\t\t\tEnter new ID: ";
+				cin.getline(user1.ID, 5);
+				IDtest(user1);
+				new_file << user1.ID << ' ';
+
+				cout << endl << "\t\t\tRegistered name: " << user1.name << endl;
+				cout << "\t\t\tEnter new name: ";
+				cin >> user1.name;
+				user1.name[0] = toupper(user1.name[0]);
+				new_file << user1.name << ' ';
+
+				cout << endl << "\t\t\tRegistered surname: " << user1.surname << endl;
+				cout << "\t\t\tEnter your surname: ";
+				cin >> user1.surname;
+				user1.surname[0] = toupper(user1.surname[0]);
+				new_file << user1.surname << ' ';
+
+				cout << endl << "\t\t\tRegistered age: " << user1.age << endl;
+				cout << "\t\t\tEnter your age: ";
+				cin >> user1.age;
+				new_file << user1.age << ' ';
+
+				cout << endl << "\t\t\tRegistered city: " << user1.city << endl;
+				cout << "\t\t\tEnter your city: ";
+				cin >> user1.city;
+				user1.city[0] = toupper(user1.city[0]);
+				new_file << user1.city << ' ';
+
+				new_file << user1.vac.lastDate << " ";
+				new_file << user1.vac.doseNo << " ";
+				new_file << user1.vac.vaccineName;
+				new_file << endl;
+				flag++;
+			}
+			else //istenilen ID degilse onun bilgilerini yeni dosyaya kaydeder
+			{
+				new_file << user1.ID << " " << user1.name << " " << user1.surname << " " << user1.age << " " << user1.city << " " << user1.vac.lastDate << " " << user1.vac.doseNo << " " << user1.vac.vaccineName;
+				new_file << endl;
+			}
+
+			file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+		}
+		if (flag == 0)
+		{
+			cout << endl << "\t\t\t\This ID is not registered." << endl;
+		}
+		_getch();
+
+		new_file.close();
+		file.close();
+		remove("database.txt");
+		rename("Record.txt", "database.txt");
+	}
+	else
+	{
+		cout << "File could not be opened." << endl;
+	}
+}
+
 void main()
 {
 	int option = 0;
@@ -246,6 +329,7 @@ void main()
 			viewRegistation();
 			break;
 		case 3:
+			updateData();
 			break;
 		case 4:
 			break;
