@@ -75,6 +75,46 @@ void IDtest(user& user1) { //kayit icin kontrol
 	system("cls");
 }
 
+void ID(char test[]) {//islemler icin kontrol
+	char strID[5];//gecici ID
+	int count = 0;
+
+	strcpy(strID, test);//girilen IDyi strIDye kopyalar
+	cin.ignore();
+	while (1) {//sonsuz donguye girer
+		count = 0;
+		for (int i = 0; i < 2; i++)//ilk iki karakterin harf olup olmadigini kontrol eder
+		{
+			if (isalpha(strID[i]))
+			{
+				strID[i] = toupper(strID[i]);
+				count++;
+			}
+
+		}
+		for (int i = 2; i < 4; i++)//son iki karakterin rakam olup olmadigini kontrol eder
+		{
+			if (isdigit(strID[i]))
+			{
+				strID[i] = toupper(strID[i]);
+				count++;
+			}
+
+		}
+		if (count != 4) {// strID yanlissa tekrar girilmesini ister
+
+			cout << "Your ID is not true. ID must be HHRR. HH = character of alphabet, RR = digit" << endl;
+			cout << "Please enter your ID again:";
+			cin.getline(strID, 5);
+
+		}
+		else//ID dogruysa donguyu sonlandırır.
+			break;
+	}
+	strcpy(test, strID);//dogru girilen strIDyi orjinal IDye kopyalar
+	system("cls");
+} 
+
 void Register() { //kullanici kayit fonksiyonu
 
 	system("cls");
@@ -140,7 +180,7 @@ void viewRegistation() { //istenilen kullanici bilgisini goruntuleyen fonksiyon
 
 		cout << "\t\t\tPlease, enter ID of user which you want to display:";
 		cin >> test;
-		//ID(test);
+		ID(test);
 
 
 		//file.seekg(-1L, ios::cur);//alt satırın wn daşından başlaması icin bu satırı yazdım
