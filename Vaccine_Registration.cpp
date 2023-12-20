@@ -303,6 +303,105 @@ void updateData()
 	}
 }
 
+bool AgeControl() {
+	return true;
+}
+bool VaccineDoseControl() {
+	return true;
+}
+bool VaccineTypeControl(char vaccineType) {
+	return true;
+}
+bool DateControl() {
+	return true;
+}
+
+void VaccineRegistration()//asi kayidi olusturma fonksiyonu
+{
+	char VaccineType;
+	char test[5];
+	int flag = 0;
+
+	fstream file, new_file;
+	file.open("database.txt", ios::in); //dosyayi okumak icin acar
+
+	system("cls");
+
+	if (file.is_open())//dosyanin acilip acilmadigini kontrol eder
+	{
+
+		system("cls");
+		cout << "\t\t\tPlease, enter ID for vaccine registration: "; //kullanicidan kayit olusturulacak ID istenilir
+		cin >> test;
+		ID(test);
+
+		new_file.open("Record.txt", ios::app | ios::out); // yeni dosya acilir
+
+		file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+		while (!file.eof())
+		{
+			if (strcmp(test, user1.ID) == 0)
+			{
+				new_file << user1.ID << " " << user1.name << " " << user1.surname << " " << user1.age << " " << user1.city;
+				if (AgeControl() == 1 && VaccineDoseControl() == 1 && DateControl() == 1) // asi kayit sartlari kontrol edilir
+				{
+					cout << "\t\t\tThere are 2 types of vaccines, please choose one of them" << endl; // asi turu kullanicidan istenilir
+					cout << "\t\t\tX or Y ? ";
+					cin >> VaccineType;
+					cout << endl;
+
+					do { // asi turu dogru olana kadar kullanıcıdan deger ister
+						if (VaccineTypeControl(VaccineType) == 0)
+							VaccineType = NULL;
+						while (toupper(VaccineType) != 'X' && toupper(VaccineType) != 'Y' || tolower(VaccineType) != 'x' && tolower(VaccineType) != 'y')
+						{
+							cout << endl << "\t\t\tERROR! Please choose one of X and Y: ";
+							cin >> VaccineType;
+						}
+					} while (VaccineTypeControl(VaccineType) == 0);
+
+					//kayit olusturulunca dose sayisi ve turu kullanici bilgilerine atanir
+					user1.vac.doseNo++;
+					user1.vac.vaccineName = toupper(VaccineType);
+					cout << "\t\t\tVaccine registration successfully created!";
+				}
+				else
+				{
+					cout << "\n\t\t\tYour vaccination registration could not be created." << endl;
+				}
+				//tum asi bilgileri yeni dosyaya kaydedilir
+				new_file << " " << user1.vac.lastDate;
+				new_file << " " << user1.vac.doseNo;
+				new_file << " " << user1.vac.vaccineName;
+				new_file << endl;
+				flag++;
+
+			}
+			else
+			{
+				new_file << user1.ID << " " << user1.name << " " << user1.surname << " " << user1.age << " " << user1.city << " " << user1.vac.lastDate << " " << user1.vac.doseNo << " " << user1.vac.vaccineName;
+				new_file << endl;
+			}
+
+			file >> user1.ID >> user1.name >> user1.surname >> user1.age >> user1.city >> user1.vac.lastDate >> user1.vac.doseNo >> user1.vac.vaccineName;
+		}
+		if (flag == 0)
+		{
+			cout << endl << "\n\t\t\tThis ID is not registered." << endl;
+		}
+		_getch();
+
+		new_file.close();
+		file.close();
+		remove("database.txt");//eski dosya silinir
+		rename("Record.txt", "database.txt"); //yeni dosyanin ismi degistirilir
+	}
+	else
+	{
+		cout << "File could not be opened." << endl;
+	}
+}
+
 void main()
 {
 	int option = 0;
@@ -332,6 +431,7 @@ void main()
 			updateData();
 			break;
 		case 4:
+			VaccineRegistration();
 			break;
 		case 5:
 			break;
