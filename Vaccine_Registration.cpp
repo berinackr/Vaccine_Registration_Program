@@ -322,8 +322,20 @@ bool VaccineDoseControl()//dose sayisini kontrol eden fonksiyon
 	else
 		return 1;
 }
-bool VaccineTypeControl(char vaccineType) {
-	return true;
+bool VaccineTypeControl(char vaccineType) //Asi türünü kontrol eden fonksiyon
+{
+	if (user1.vac.vaccineName != NULL)
+	{
+		if (user1.vac.vaccineName != toupper(vaccineType))// farkli asi yapmak istediginde uyari mesaji yazar.
+		{
+			cout << "\n\t\t\tYou cannot have this vaccine.\nRequest registration of the type of your previous vaccination" << endl;
+			return 0;
+		}
+		else
+			return 1;
+	}
+	else
+		return 1;
 }
 bool DateControl() {
 	return true;
