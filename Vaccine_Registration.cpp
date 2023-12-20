@@ -304,7 +304,13 @@ void updateData()
 }
 
 bool AgeControl() {
-	return true;
+	if (user1.age < 18) // kucukse kullaniciya uyari mesaji yazar
+	{
+		cout << "\n\t\t\tPerson under the age of 18 cannot register for vaccination!" << endl;
+		return 0;
+	}
+	else
+		return 1;
 }
 bool VaccineDoseControl() {
 	return true;
