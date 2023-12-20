@@ -312,8 +312,15 @@ bool AgeControl() {
 	else
 		return 1;
 }
-bool VaccineDoseControl() {
-	return true;
+bool VaccineDoseControl()//dose sayisini kontrol eden fonksiyon
+{
+	if (user1.vac.doseNo == 2)//Dose sayisi 2 ise kullanıcıya uyari mesaji yazar.
+	{
+		cout << "\n\t\t\tYou have reached the maximum vaccine dose level.\n You can't vaccinate any more." << endl;
+		return 0;
+	}
+	else
+		return 1;
 }
 bool VaccineTypeControl(char vaccineType) {
 	return true;
