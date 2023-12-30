@@ -337,8 +337,47 @@ bool VaccineTypeControl(char vaccineType) //Asi türünü kontrol eden fonksiyon
 	else
 		return 1;
 }
-bool DateControl() {
-	return true;
+bool DateControl() // son asi tarihini kontrol eden fonksiyon
+{
+	int year, month, day;
+	int year1, month1, day1;
+	int total;
+
+	//kayitli gun ay yil string bilgilerini alir ve integera cevirir
+	day1 = stoi(user1.vac.lastDate.substr(0, 2));
+	month1 = stoi(user1.vac.lastDate.substr(3, 2));
+	year1 = stoi(user1.vac.lastDate.substr(6, 4));
+
+	//sistem saatinden gun ay yil bilgilerini alir
+	time_t now = time(0);
+
+	tm* ltm = localtime(&now);
+
+	year = 1900 + ltm->tm_year;
+	month = 1 + ltm->tm_mon;
+	day = ltm->tm_mday;
+
+	total = (day - day1) + (month - month1) * 30 + (year - year1) * 365; //arasindaki gun farkini bulur
+
+	if (total >= 30)//gun farki 30dan fazla ise yeni tarih bilgilerini ekler
+	{
+		if (day < 10)
+			user1.vac.lastDate = '0' + to_string(day) + '.';
+		else
+			user1.vac.lastDate = to_string(day) + '.';
+		if (month < 10)
+			user1.vac.lastDate += '0' + to_string(month) + '.';
+		else
+			user1.vac.lastDate += to_string(month) + '.';
+
+		user1.vac.lastDate += to_string(year);
+		return 1;
+	}
+	else//30 gunden az ise kullaniciya uyarı mesaji yazar 
+	{
+		cout << "\n\t\t\tYou have been vaccinated within the last month." << endl;
+		return 0;
+	}
 }
 
 void VaccineRegistration()//asi kayidi olusturma fonksiyonu
