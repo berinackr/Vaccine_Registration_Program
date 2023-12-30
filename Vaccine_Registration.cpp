@@ -1,12 +1,12 @@
 #include<iostream>
-#include<ctype.h>
-#include<string>
+#include<string>//getline icin
 #include<fstream>//dosya islemleri icin
+#include<ctype.h>
 #include<conio.h>//_getch icin
 
 using namespace std;
 
-struct VaccineInformation { // ası bilgilerinin structi
+struct VaccineInformation { // aşı bilgilerinin structi
 	string lastDate;
 	char vaccineName;
 	int doseNo;
@@ -25,7 +25,6 @@ void IDtest(user& user1) { //kayit icin kontrol
 
 	char strID[5];//gecici ID
 	int count = 0;
-
 	fstream file("database.txt", ios::app | ios::in);//dosyayi okumak ve eklemek icin acar 
 
 	if (file.is_open())//dosyanin acilip acilmadigini kontrol eder.
@@ -34,7 +33,6 @@ void IDtest(user& user1) { //kayit icin kontrol
 
 		while (1) {//sonsuz donguye girer
 			count = 0;
-
 			for (int i = 0; i < 2; i++)//ilk iki karakterin harf olup olmadigini kontrol eder
 			{
 				if (isalpha(strID[i]))
@@ -113,7 +111,7 @@ void ID(char test[]) {//islemler icin kontrol
 	}
 	strcpy(test, strID);//dogru girilen strIDyi orjinal IDye kopyalar
 	system("cls");
-} 
+}
 
 void Register() { //kullanici kayit fonksiyonu
 
@@ -126,12 +124,10 @@ void Register() { //kullanici kayit fonksiyonu
 	do {
 
 		cin.ignore();
-		cout << "\t\t\t\tEnter your ID(4-digit): ";
+		cout << "\t\t\t\tEnter your ID: ";
 		cin.getline(newUser.ID, 5);
 		IDtest(newUser); //ID2yi kontrol eder
-		cout << "\t\t\t\tEnter your ID(4-digit): " << newUser.ID << endl;
-
-
+		cout << "\t\t\t\tEnter your ID: " << newUser.ID << endl;
 
 		cout << "\t\t\t\tEnter your name: ";
 		cin >> newUser.name;
@@ -165,7 +161,6 @@ void Register() { //kullanici kayit fonksiyonu
 	} while (toupper(again) == 'Y');
 	file.close();
 }
-
 
 void viewRegistation() { //istenilen kullanici bilgisini goruntuleyen fonksiyon
 
@@ -303,7 +298,34 @@ void updateData()
 	}
 }
 
-bool AgeControl() {
+void allRegistrations() { //tum kullanici kayitlarini yazdiran fonksiyon
+	fstream file("database.txt", ios::in);
+
+	if (file.is_open())
+	{
+		string line;
+
+		system("cls");
+
+		cout << " \t\t\t\t    # All Vaccine Registrations #" << endl;
+		while (getline(file, line)) {//dosyayi satir satir okur
+
+			cout << "\t\t\t\t" << line << endl;
+
+		}
+
+		_getch();
+		file.close();
+	}
+	else
+	{
+		cout << "File could not be opened." << endl;
+	}
+	system("cls");
+}
+
+bool AgeControl() //18 yasindan buyuk olup olmadıgını kontrol eder
+{
 	if (user1.age < 18) // kucukse kullaniciya uyari mesaji yazar
 	{
 		cout << "\n\t\t\tPerson under the age of 18 cannot register for vaccination!" << endl;
@@ -470,6 +492,8 @@ void main()
 {
 	int option = 0;
 
+	allRegistrations(); // program baslangıcında kayitli kullanici varsa ekrana yazdirir
+
 	while (option != 6)
 	{
 		cout << endl << " \t\t\t\t    # VACCINE REGISTRATION PROGRAM # " << endl << endl;
@@ -498,6 +522,7 @@ void main()
 			VaccineRegistration();
 			break;
 		case 5:
+			allRegistrations();
 			break;
 		case 6:
 			break;
